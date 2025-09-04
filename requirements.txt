@@ -2,3 +2,5 @@ transformers
 torch
 dotenv
 pillow
+sentence-transformers
+groq
