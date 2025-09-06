@@ -17,8 +17,15 @@ class embed_model:
         return embeddings
         
         
-    #print("SentenceTransformers embedding:\n", sentence_transformer_embed("hello world","all-MiniLM-L6-v2"))
-    print("HuggingFace embedding:\n", huggingface_embed("its beautiful day","sentence-transformers/all-MiniLM-L6-v2"))
+    print("SentenceTransformers embedding:\n", sentence_transformer_embed("hello world","all-MiniLM-L6-v2"))
+    #print("HuggingFace embedding:\n", huggingface_embed("its beautiful day","sentence-transformers/all-MiniLM-L6-v2"))
     
     
-    
+    #output
+    '''
+    [-3.44772749e-02  3.10231782e-02  6.73497003e-03  2.61089858e-02
+ -3.93620245e-02 -1.60302445e-01  6.69240132e-02 -6.44148979e-03
+ -4.74504791e-02  1.47588560e-02  7.08752796e-02  5.55276312e-02
+  1.91933345e-02 -2.62513123e-02 -1.01095429e-02 -2.69404557e-02
+  2.23074611e-02 -2.22266484e-02 -1.49692640e-01 -1.74930077e-02......]
+    '''
