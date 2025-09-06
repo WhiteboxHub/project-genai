@@ -15,8 +15,7 @@ class file_chunking:
         return chunks
 
     
-    #Recursive chunking (via LangChain)
-    #Start with large chunks (e.g., sections), then recursively split into smaller chunks if too large.
+    #Recursive chunking   
     @staticmethod
     def recursive_chunk(text: str, chunk_size: int = 500, overlap: int = 50):
         """
