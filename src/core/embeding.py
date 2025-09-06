@@ -1,47 +1,24 @@
-
-class embed_model:
-    from typing import List, Union
-    import numpy as np
+from sentence_transformers import SentenceTransformer
+from langchain_huggingface import HuggingFaceEmbeddings
+class embed_model:    
 
     #SentenceTransformers
     @staticmethod
-    def sentence_transformer_embed(texts: Union[str, List[str]], model_name="sentence-transformers/all-MiniLM-L6-v2"):
-        """
-        Generate embeddings using SentenceTransformers.
-        Requires: pip install sentence-transformers
-        """
-        try:
-            from sentence_transformers import SentenceTransformer
-        except ImportError:
-            raise ImportError("Please install sentence_transformers: pip install sentence_transformers")
-        
-    
-        if isinstance(texts, str):
-            texts = [texts]
+    def sentence_transformer_embed(text,model_name):
         model = SentenceTransformer(model_name)
-        embeddings = model.encode(texts, convert_to_numpy=True)
+        embeddings=model.encode(text)
         return embeddings
     
-    #HuggingFace Transformer Embeddings
+    #HuggingFace Embeddings
     @staticmethod
-    def huggingface_embed(texts: Union[str, List[str]], model_name="distilbert-base-uncased"):
-        """
-        Generate embeddings using HuggingFace Transformers (CLS token pooling).
-        Requires: pip install transformers torch
-        """
-        from transformers import AutoTokenizer, AutoModel
-        import torch
-
-        if isinstance(texts, str):
-            texts = [texts]
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model = AutoModel.from_pretrained(model_name)
-
-        inputs = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
-        with torch.no_grad():
-            outputs = model(**inputs)
-        # Use [CLS] token representation
-        embeddings = outputs.last_hidden_state[:, 0, :].numpy()
+    def huggingface_embed(text,model):
+        model = HuggingFaceEmbeddings(model_name=model)
+        embeddings=model.embed_documents(text)
         return embeddings
+        
+        
+    #print("SentenceTransformers embedding:\n", sentence_transformer_embed("hello world","all-MiniLM-L6-v2"))
+    print("HuggingFace embedding:\n", huggingface_embed("its beautiful day","sentence-transformers/all-MiniLM-L6-v2"))
+    
     
     

@@ -1,11 +1,8 @@
-class file_chunking: 
-    import nltk
-    import langchain
-    import PyPDF2
-    import requests
-    import bs4
-    import csv
-
+import nltk
+import langchain 
+nltk.download('punkt_tab')
+class file_chunking:     
+       
     #Fixed-size chunking
     @staticmethod
     def overlap(text,chunk_size=500,overlap=50):
@@ -21,85 +18,53 @@ class file_chunking:
     #Recursive chunking (via LangChain)
     #Start with large chunks (e.g., sections), then recursively split into smaller chunks if too large.
     @staticmethod
-    def recursive(text, chunk_size=500, overlap=50):
+    def recursive_chunk(text: str, chunk_size: int = 500, overlap: int = 50):
+        """
+        Recursive chunking using LangChain.
+        """
         try:
             from langchain.text_splitter import RecursiveCharacterTextSplitter
         except ImportError:
             raise ImportError("Please install langchain: pip install langchain")
         splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=overlap,
-        separators=["\n\n", "\n", " ", ""]
+            chunk_size=chunk_size, chunk_overlap=overlap
         )
         return splitter.split_text(text)
     
-    #Sentence-based chunking
-    #Split text by sentences, then group multiple sentences until you reach a size limit.
+    #Sentence-based chunking    
     @staticmethod
-    def sentence(text, max_tokens=200):
+    def sentence_chunk(text):
+        """
+        Chunk text into sentences using NLTK's sent_tokenize.    
+        Args:
+        text (str): Input text string    
+        Returns:
+        list: List of sentences (chunks)
+        """
         try:
             from nltk.tokenize import sent_tokenize
         except ImportError:
             raise ImportError("Please install nltk: pip install nltk")        
-        sentences = sent_tokenize(text)
-        chunks, current, tokens = [], [], 0
-        for sent in sentences:
-            sent_len = len(sent.split())
-            if tokens + sent_len > max_tokens:
-                chunks.append(" ".join(current))
-                current, tokens = [], 0
-            current.append(sent)
-            tokens += sent_len
-        if current:
-            chunks.append(" ".join(current))
-        return chunks
+        sentences = sent_tokenize(text)        
+        return sentences
    
-    # extract text from Pdf
-    @staticmethod
-    def extract_text_from_pdf(pdf_path):
-        try:
-            from PyPDF2 import PdfReader
-        except ImportError:
-            raise ImportError("Please install PyPDF2: pip install PyPDF2")
-        reader = PdfReader(pdf_path)
-        text = ""
-        for page in reader.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text + "\n"
-        return text
+    sample_text = """Artificial Intelligence is transforming the world. 
+    It is used in healthcare, finance, and education. 
+    Sentence-based chunking helps in semantic search.
+    The creation of a government grantmaking agency.
+    They inspire curiosity about our own experiences and those of our neighbours.
+    """
+    print("Fixed Chunks:\n",overlap(sample_text,15,5))
+    print("Recursive Chunks:\n",recursive_chunk(sample_text,15,5))
+    print("Sentence Chunks:\n",sentence_chunk(sample_text))    
     
-    # extract text from text file
-    @staticmethod
-    def extract_text_from_txt(txt_path):
-        with open(txt_path, "r", encoding="utf-8") as f:
-            return f.read()
-        
-    # extract text from csv file
-    @staticmethod    
-    def extract_text_from_csv(file_path):
-        text = []
-        with open(file_path, "r", encoding="utf-8") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                # Join all columns in a row into a single string
-                text.append(" ".join(row))
-            return "\n".join(text)
-
-    # extract text from web
-    @staticmethod
-    def extract_text_from_web(url):
-        response = requests.get(url)
-        if response.status_code != 200:
-            raise ValueError(f"Failed to fetch URL: {url}")
-        try:
-            from bs4 import BeautifulSoup
-        except ImportError:
-            raise ImportError("Please install bs4: pip install bs4")        
-        soup = BeautifulSoup(response.text, "html.parser")
-        # Remove scripts/styles
-        for script in soup(["script", "style"]):
-            script.decompose()
-        text = soup.get_text(separator="\n")
-        return text
-        
+    ####output
+    
+    """
+    Fixed Chunks:
+ ['Artificial Inte', ' Intelligence i', 'nce is transfor', 'nsforming the w', 'the world. \n   ', ' \n    It is use', 's used in healt', 'healthcare, fin', ', finance, and ', ' and education.', 'tion. \n    Sent', ' Sentence-based', 'based chunking ', 'king helps in s', ' in semantic se', 'ic search.\n    ', '\n    The creati', 'reation of a go', ' a government g', 'ent grantmaking', 'aking agency.\n ', 'cy.\n    They in', 'ey inspire curi', ' curiosity abou', ' about our own ', ' own experience', 'iences and thos', ' those of our n', 'our neighbours.', 'ours.\n    ']
+Recursive Chunks:
+ ['Artificial', 'Intelligence', 'is', 'transforming', 'the world.', 'It is used', 'used in', 'in healthcare,', 'finance, and', 'and education.', 'Sentence-based', 'chunking helps', 'in semantic', 'search.', 'The', 'The creation', 'of a', 'a government', 'grantmaking', 'agency.', 'They', 'They inspire', 'curiosity', 'about our own', 'experiences', 'and those of', 'of our', 'neighbours.']
+Sentence Chunks:
+ ['Artificial Intelligence is transforming the world.', 'It is used in healthcare, finance, and education.', 'Sentence-based chunking helps in semantic search.', 'The creation of a government grantmaking agency.', 'They inspire curiosity about our own experiences and those of our neighbours.']
+    """
