@@ -1,0 +1,3 @@
+ipykernal
+python
+langchain
