@@ -3,6 +3,7 @@ import nltk
 from nltk.tokenize import sent_tokenize
 nltk.download('punkt_tab')
 
+
 class file_chunking:
     #Chunking without using any library- Owncode
     @staticmethod
@@ -48,7 +49,7 @@ class file_chunking:
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=overlap,
-            #separators=["\n\n", "\n", ". ", " ", ""],  # fallback hierarchy
+            separators=["\n\n", "\n", ". ", " ", ""],  # fallback hierarchy
             
         )
         chunks = splitter.split_text(text)
@@ -93,7 +94,36 @@ if __name__ == "__main__":
     for i, c in enumerate(chunks2, 1):
         print(f"Chunk {i}: {c}")    
 
-#print(file_chunking.overlap(sample_text,200,10))
+"""
+output----
+  this is an example for chunking
+Chunk 1: Retrieval-Augmented Generation (RAG) is a method 
+
+Chunk 2: hod 
+    that combines retrieval and generation.
+ 
+Chunk 3: on.
+    It helps large language models access exte
+Chunk 4:  external knowledge. Sentence 
+    chunking keeps 
+Chunk 5: eeps full sentences intact.
+
+
+this is an example for sentence chunking
+Chunk 1: Retrieval-Augmented Generation (RAG) is a method 
+    that combines retrieval and generation.
+Chunk 2: It helps large language models access external knowledge.
+Chunk 3: Sentence 
+    chunking keeps full sentences intact.
+
+
+This is an example for recursive chunking
+Chunk 1: Retrieval-Augmented Generation (RAG) is a method
+Chunk 2: that combines retrieval and generation.
+Chunk 3: It helps large language models access
+Chunk 4: external knowledge. Sentence
+Chunk 5: chunking keeps full sentences intact.
+"""
 
      
 
