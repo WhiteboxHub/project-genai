@@ -1,4 +1,4 @@
-#from gensim.models import Word2Vec
+from gensim.models import Word2Vec
 from sentence_transformers import SentenceTransformer
 import requests
 import json
@@ -33,16 +33,26 @@ class embed_model:
         )
         print(result)
     
-    '''
+    
     @staticmethod
     def word2vec():
         # Initilize and train the model
-        model = Word2Vec(sentences,vector_size = 100, window = 5, min_count = 1)
-        # Access a word vector
-        vector_Alice = model.wv['Alice']
-        #Save the mode
-        model.save("my_word2vec_model.bin")
+        sentences = [["This", "is", "an", "example", "Harman"], ["Harman", "lives", "in", "San", "Jose"], ["It", "is", "a", "sunny", "day"]]
+        model = Word2Vec(sentences, min_count=1)
     
-    '''
+        # Access a word vector that is in the vocabulary
+        try:
+            vector_harman = model.wv['San']
+            print("Vector for 'Harman':")
+            print(vector_harman)
+        except KeyError as e:
+            print(e)
+    
+    # You can also check the vocabulary
+    print("\nModel vocabulary:")
+    print(list(model.wv.index_to_key))
+    
+    
 if __name__ == "__main__":
-    embed_model.huggingface_embedding()
+    #embed_model.huggingface_embedding()
+    embed_model.word2vec()

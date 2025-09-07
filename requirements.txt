@@ -4,3 +4,7 @@ dotenv
 pillow
 sentence-transformers
 groq
+gensim
+langchain-text-splitters
+nltk 
+PyPDF2
