@@ -1,0 +1,9 @@
+transformers
+torch
+sentence-transformers
+groq
+langchain-text-splitters
+nltk 
+PyPDF2
+pymilvus==2.6.0
+dotenv
