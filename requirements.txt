@@ -1,0 +1,7 @@
+sentence-transformers
+ipykernel
+langchain
+huggingface_hub
+ipywidgets
+nltk
+chromadb
