@@ -1,0 +1,6 @@
+pypdf
+langchain-community
+cryptography>=3.1
+nltk
+langchain-huggingface
+langchain-postgres
