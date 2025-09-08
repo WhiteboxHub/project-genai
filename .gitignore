@@ -1,2 +1,7 @@
-venv
+venv/
 .env
+volumes/
+.idea/
+creditcard.csv
+src/core/__pycache__
+src/utils/__pycache__

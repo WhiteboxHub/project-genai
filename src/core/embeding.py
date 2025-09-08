@@ -10,15 +10,15 @@ load_dotenv()
 
 class embed_model:
     @staticmethod
-    def sentence_transformer():
-        
-        sentences = ["This is an example sentence", "Each sentence is converted"]
-
+    def sentence_transformer(sentences):
+    
         model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
         embeddings = model.encode(sentences)
-        print(embeddings.shape) # shape 384
-        print(embeddings[0])
+        #print(embeddings.shape) # shape 384
+        #print(embeddings[0])
         #print(embeddings)
+
+        return embeddings
 
     @staticmethod
     def huggingface_embedding():
@@ -33,7 +33,7 @@ class embed_model:
         )
         print(result)
     
-    
+    '''
     @staticmethod
     def word2vec():
         # Initilize and train the model
@@ -51,8 +51,11 @@ class embed_model:
     # You can also check the vocabulary
     print("\nModel vocabulary:")
     print(list(model.wv.index_to_key))
-    
+    '''
     
 if __name__ == "__main__":
     #embed_model.huggingface_embedding()
-    embed_model.word2vec()
+    #embed_model.word2vec()
+    print("***")
+    sentences = ["This is an example sentence", "Each sentence is converted"]
+    embed_model.sentence_transformer(sentences)

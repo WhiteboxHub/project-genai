@@ -34,13 +34,11 @@ class file_chunking:
     def recursive(text:str)->list[str]:
         # langchain
         splitter = RecursiveCharacterTextSplitter(
-            chunk_size = 100,
-            chunk_overlap = 0
+            chunk_size = 300,
+            chunk_overlap = 50
          )
         result = splitter.split_text(text)
-        print(f"Recursive chunking created {len(result)} chunks")
-
-        print(f"Prinitng first 3 chunks:", result[0:3])
+        return result
 
     @staticmethod
     def sentence_tokenize(text,sentences_per_chunk:int) -> list:
@@ -72,32 +70,14 @@ class file_chunking:
         
 
 if __name__ == "__main__":
-    def read_text_from_file(filepath):
-        with open(filepath, 'r', encoding='utf-8') as file:
-            return file.read()
-        
-    def read_text_from_pdf(filepath):
-        """Reads text from a PDF file."""
-        text = ""
-        with open(filepath, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
-            for page in reader.pages:
-                text += page.extract_text()
-        return text.replace('\n', ' ')
-    '''
-    def read_text_from_csv(filepath):
-        """Reads text from a CSV file."""
-        text = ""
-        with open(filepath, 'r', newline='') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                text += ' '.join(row) + ' '
-        return text.strip()
     
-    '''
     # Example usage with your file_chunking class:
     text_from_file = read_text_from_file("Data/Gutenburg.txt")
-    file_chunking.recursive(text_from_file)
+    chunked_file = file_chunking.recursive(text_from_file)
+    print("****")
+    print(f"Recursive chunking created {len(chunked_file)} chunks")
+
+    print(f"Prinitng first 3 chunks:", chunked_file[0:3])
 
     #file_chunking.overlap(text_from_file,300,50)
     #text = "hello,my name is Harman "
