@@ -52,7 +52,7 @@ class Milvus:
         if texts:
             embeddings = model.encode(texts).tolist()
             collection.insert([embeddings])
-            collection.flush()
+            collection.flush()  
             print(f"Inserted {len(texts)} records into '{collection_name}'.")
 
         # Query if query_text is provided
@@ -64,7 +64,7 @@ class Milvus:
             # collection is your Milvus collection object
             index_params = {
                 "index_type": "IVF_FLAT",  # can also be HNSW, IVF_SQ8, etc.
-                "metric_type": "L2",
+                "metric_type": "L2",     # ANN,COSINE
                 "params": {"nlist": 128}   # number of clusters
             }
 
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         print(item)
 
     
-    #---------------Milvus-End-------------------------
+ #---------------Milvus-End-------------------------   
     
 class PGvectordb:
     def store_data():
@@ -131,9 +131,15 @@ ect-genai/src/core/storing.py
 Collection 'my_collection' exists, using existing collection.
 Inserted 2 records into 'my_collection'.
 Top matches (ID, distance):
-(460663754245597922, 0.2971716821193695)
-(460663754245597925, 0.2971716821193695)
 (460663754245597928, 0.2971716821193695)
-(.venv) hema@Mac project-genai % 
+(460663754245597934, 0.2971716821193695)
+(460663754245597931, 0.2971716821193695)
+(460663754245597925, 0.2971716821193695)
+(460663754245597937, 0.2971716821193695)
+(460663754245597922, 0.2971716821193695)
+(460663754245597940, 0.2971716821193695)
+(460663754245597943, 0.2971716821193695)
+(460663754245597932, 1.6296353340148926)
+(460663754245597929, 1.6296353340148926)
 
 """

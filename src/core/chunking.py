@@ -94,8 +94,9 @@ if __name__ == "__main__":
     for i, c in enumerate(chunks2, 1):
         print(f"Chunk {i}: {c}")    
 
+#--------------------------output-------------------------
 """
-output----
+
   this is an example for chunking
 Chunk 1: Retrieval-Augmented Generation (RAG) is a method 
 

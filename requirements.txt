@@ -1,2 +1,17 @@
  # langchain
   # nltk lib 
+pip install transformers
+python3 -m pip install sentence-transformers
+/Users/hema/Downloads/milvus-standalone-docker-compose.yml
+mkdir milvus-docker
+docker-compose.yml
+pip install pymilvus
+
+Milvus server version: v2.3.21
+PyMilvus SDK version: 2.6.1
+
+For PDF files
+pip install pypdf2 langchain
+
+
+
