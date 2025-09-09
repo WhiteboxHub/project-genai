@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -10,6 +10,9 @@ class embed_model:
         embeddings = model.encode(chunks)
         return embeddings
     
-
-    # def huggingface embeding
-    pa
+    @staticmethod
+    def huggingface_embedding(chunks, model_name="sentence-transformers/all-MiniLM-L6-v2"):
+     embedding_model=HuggingFaceEmbeddings(model_name)   
+     embedding = embedding_model.embed_documents(chunks)
+     return embedding
+    

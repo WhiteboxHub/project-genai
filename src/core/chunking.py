@@ -1,5 +1,14 @@
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import nltk
+from nltk.tokenize import sent_tokenize
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class file_chunking:
+    nltk.download('punkt_tab')
     @staticmethod
     def overlap(text, chunk_size= 100, overlap=20):
         words = text.split()
@@ -16,46 +25,37 @@ class file_chunking:
 
     
     @staticmethod
-    def recrsive():
-        # langchain
-        pass
-    
-    
-#  Sentence- Based chunking: splitting text based on sentence( use regex for splitting, does not depend on word token)
-#  it does not break sentence for better semantic understanding,used in text summarization,QA, LLMs(eg chatgpt) 
-
-
+    def recrsive(text,chunk_size=50,overlap=5):
+         splitter=RecursiveCharacterTextSplitter(
+             chunk_size=chunk_size,
+            chunk_overlap=overlap
+        )
+         return splitter.split_text(text)
+   
+       
     @staticmethod
-    def sentence(text, chunk_size=500):
-        """
-        Split text into sentence sementic chunks using NLTK, where each chunk does not exceed max chunk_size 500.
-        """
-        import nltk
-        from nltk.tokenize import sent_tokenize
+    def sentence(text,sentences_per_chunk=2):
+        sentences=sent_tokenize(text)
+        return [' '.join(sentences[i:i+sentences_per_chunk]) for i in range(0, len(sentences), sentences_per_chunk)]
 
-        # Download the sentence tokenizer model (only needs to happen once)
-        nltk.download('punkt', quiet=True)
 
-        # Step 1: Tokenize text into sentences
-        sentences = sent_tokenize(text)
+ 
 
-        # Step 2: Group sentences into chunks
-        chunks = []
-        current_chunk = ""
 
-        for sentence in sentences:
-            # If adding the next sentence doesn't exceed max_chunk_len
-            if len(current_chunk) + len(sentence) + 1 <= chunk_size:
-                current_chunk += " " + sentence if current_chunk else sentence
-            else:
-                chunks.append(current_chunk.strip())
-                current_chunk = sentence
 
-        # Add any remaining sentence as a chunk
-        if current_chunk:
-            chunks.append(current_chunk.strip())
+file_path = os.getenv("file_path")
+with open(file_path, "r") as file:
+    text = file.read()
+chunks = file_chunking.recrsive(text, chunk_size=100, overlap=20)
+chunks2=file_chunking.overlap(text,chunk_size=50,overlap=5)
+print(len(chunks))
+print(len(chunks2))
+sentence1=file_chunking.sentence(text)
+print(sentence1[0])
 
-        return chunks
-        pass
+
+
+      
+        
     
     

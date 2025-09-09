@@ -1,0 +1,27 @@
+Title: Introduction to Machine Learning
+
+Machine Learning is a subset of Artificial Intelligence that enables systems to learn from data and improve over time without being explicitly programmed.
+
+There are three main types of machine learning:
+1. Supervised Learning – where the model is trained on labeled data.
+2. Unsupervised Learning – where the model identifies patterns from unlabeled data.
+3. Reinforcement Learning – where an agent learns by interacting with an environment and receiving rewards or penalties.
+
+Supervised learning includes tasks like classification (e.g., spam detection) and regression (e.g., predicting house prices). Unsupervised learning involves clustering and dimensionality reduction.
+
+Popular algorithms include:
+- Linear Regression
+- Decision Trees
+- Random Forests
+- Support Vector Machines
+- K-Means Clustering
+- Neural Networks
+
+Real-world applications of machine learning include:
+- Personalized recommendations (Netflix, Amazon)
+- Fraud detection in banking
+- Self-driving cars
+- Medical diagnosis assistance
+- Chatbots and virtual assistants
+
+As the amount of data grows, machine learning plays a vital role in extracting actionable insights, automating tasks, and enabling intelligent systems.
