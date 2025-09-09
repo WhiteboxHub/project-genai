@@ -65,13 +65,45 @@ if __name__ == "__main__":
         print(f"✅ Stored {inserted_info['inserted']} chunks from {filename}")
 
 # --- Optional: test retrieval ---
-#     query = "What is in the document?"
-#     print(f"\n🔎 Testing retrieval for query: {query}")
-#     results = db.search(query, k=3)
-#     for r in results:
-#         print("Retrieved:", r)
-#   #========OUTPUT==========================
-  #🔎 Testing retrieval for query: What is in the document?
-#Retrieved: {'filename': 'chunking_strategies.pdf', 'text': 'A template consists of a core, which contains constant information, and slots, where variable \ninformation can be stored.', 'score': 0.4037086069583893}
-#Retrieved: {'filename': 'chunking_strategies.pdf', 'text': 'A template consists of a core, which contains constant information, and slots, where variable \ninformation can be stored.', 'score': 0.4037086069583893}
-#Retrieved: {'filename': 'langchain.pdf', 'text': 'PDFDataExtractor: A Tool for \nReading Scientific Text and Interpreting Metadata from the Typeset \nLiterature in the Portable Document For mat.', 'score': 0.37489455938339233}      
+
+    test_query = "What is Agentic AI?"  # you can change this
+    print(f"\n🔎 Testing retrieval for query: {test_query}")
+
+    # COSINE search
+    results_cos = db.ann_cosine_search(test_query, k=3)
+    print("\n--- COSINE Search Results ---")
+    for r in results_cos:
+        print(f"[{r['filename']}] (score={r['score']:.4f}) -> {r['text'][:120]}...")
+
+    # IP search
+    results_ip = db.ip_search(test_query, k=3)
+    print("\n--- IP Search Results ---")
+    for r in results_ip:
+        print(f"[{r['filename']}] (score={r['score']:.4f}) -> {r['text'][:120]}...")
+#==============OUTPUT====================
+# ✅ Connected to Milvus at localhost:19530
+
+# 📄 Processing file: langchain.pdf
+# ⚠️ Skipping langchain.pdf (already ingested)
+
+# 📄 Processing file: agentic-ai.pdf
+# ⚠️ Skipping agentic-ai.pdf (already ingested)
+
+# 📄 Processing file: chunking_strategies.pdf
+# ⚠️ Skipping chunking_strategies.pdf (already ingested)
+
+# 🔎 Testing retrieval for query: What is Agentic AI?
+
+# --- COSINE Search Results ---
+# [agentic-ai.pdf] (score=1.0000) -> What is Agentic AI?...
+# [agentic-ai.pdf] (score=1.0000) -> What is agentic AI?...
+# [agentic-ai.pdf] (score=0.8518) -> Agentic AI generally refers to AI systems that 
+# possess the capacity to make autonomous 
+# decisions and take actions to a...
+
+# --- IP Search Results ---
+# [agentic-ai.pdf] (score=1.0000) -> What is Agentic AI?...
+# [agentic-ai.pdf] (score=1.0000) -> What is agentic AI?...
+# [agentic-ai.pdf] (score=0.8518) -> Agentic AI generally refers to AI systems that 
+# possess the capacity to make autonomous 
+# decisions and take actions to a...        
