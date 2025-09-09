@@ -25,12 +25,13 @@ class file_chunking:
 
     
     @staticmethod
-    def recrsive(text,chunk_size=50,overlap=5):
-         splitter=RecursiveCharacterTextSplitter(
-             chunk_size=chunk_size,
+    def recursive(text: str, chunk_size: int = 500, overlap: int = 50):
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
             chunk_overlap=overlap
         )
-         return splitter.split_text(text)
+        return splitter.split_text(text)
+
    
        
     @staticmethod
@@ -43,7 +44,7 @@ class file_chunking:
 
 
 
-file_path = os.getenv("file_path")
+'''file_path = os.getenv("file_path")
 with open(file_path, "r") as file:
     text = file.read()
 chunks = file_chunking.recrsive(text, chunk_size=100, overlap=20)
@@ -51,7 +52,7 @@ chunks2=file_chunking.overlap(text,chunk_size=50,overlap=5)
 print(len(chunks))
 print(len(chunks2))
 sentence1=file_chunking.sentence(text)
-print(sentence1[0])
+print(sentence1[0])'''
 
 
 

@@ -1,5 +1,7 @@
+from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 import os
 from langchain_groq import ChatGroq
+from prompts import create_chat_prompt_template
 
 def generate_response(context: str, question: str):
   
@@ -15,8 +17,11 @@ def generate_response(context: str, question: str):
     )
     
     chat_prompt = create_chat_prompt_template()
-    formatted_prompt = chat_prompt.format_prompt(context=context, question=question)
-    
-    result = llm.invoke(formatted_prompt.to_messages())
-    
-    return result.content
+    # Format the prompt with the given context and question
+    formatted_prompt = chat_prompt.format_messages(
+        context=context,
+        question=question
+    )
+
+    response = llm.invoke(formatted_prompt)
+    return response.content

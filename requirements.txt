@@ -12,3 +12,4 @@ pymupdf
 streamlit
 langchain_huggingface
 chromadb
+langchain_groq
