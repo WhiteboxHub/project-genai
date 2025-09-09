@@ -40,8 +40,20 @@ class Milvus:
 
         print(type(insert_result))
 
-    
+    def retrive_data(self, query_embedding):
+        res = self.client.search(
+            collection_name=self.collection_name,
+            anns_field="embedding",
+            data=[query_embedding],
+            limit=3,
+            search_params={"metric_type": "L2"},
+            output_fields=["text"]
+        )
 
+        retrieved_texts = [hit.entity.get("text") for hits in res for hit in hits]
+        return retrieved_texts  
+
+    # Needs to be fixed
     def text_match(self, query_text):
         """
         Returns all text chunks that exactly match the query_text.
