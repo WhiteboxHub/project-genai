@@ -66,7 +66,6 @@ class MilvusDB:
         Waits until Milvus server is available.
         """
         self.collection_name = collection_name
-        # initialize embedding model
         self.emb_model = embedding_model or EmbedModel.huggingface_embedding()
 
         # --------- Wait for Milvus to be ready ----------
@@ -74,7 +73,7 @@ class MilvusDB:
         for attempt in range(max_retries):
             try:
                 connections.connect(alias="default", host=host, port=port)
-                print(f"Connected to Milvus at {host}:{port}")
+                print(f"✅ Connected to Milvus at {host}:{port}")
                 break
             except Exception as e:
                 print(f"Milvus not ready, retrying ({attempt+1}/{max_retries})...")
@@ -114,24 +113,26 @@ class MilvusDB:
         self.collection.load()
 
     def store_data(self, texts: List[str], filenames: Optional[List[str]] = None):
+        """
+        Store chunks of text and embeddings into Milvus.
+        """
         if filenames is None:
             filenames = ["" for _ in texts]
         if len(filenames) != len(texts):
             raise ValueError("filenames and texts must have the same length")
 
-        # compute embeddings
         vectors = [self.emb_model.embed_query(t) for t in texts]
 
-        # insert into Milvus
-        entities = [filenames, texts, vectors]  # order matches schema fields (excluding auto pk)
+        entities = [filenames, texts, vectors]  # order must match schema fields
         self.collection.insert(entities)
         self.collection.flush()
         return {"inserted": len(texts)}
 
-    def retrieve_data(self, query: str, k: int = 3):
-        query_vector = self.emb_model.embed_query(query)
-        search_params = {"metric_type": "COSINE", "params": {"nprobe": 10}}
-
+    def ANN_search(self, query_vector: List[float], k: int = 3, nprobe: int = 10):
+        """
+        Perform ANN search given a vector.
+        """
+        search_params = {"metric_type": "COSINE", "params": {"nprobe": nprobe}}
         results = self.collection.search(
             data=[query_vector],
             anns_field="embedding",
@@ -142,11 +143,19 @@ class MilvusDB:
 
         hits = []
         for hit in results[0]:
-            fname = hit.entity.get("filename")
-            text = hit.entity.get("text")
-            score = hit.score
-            hits.append({"filename": fname, "text": text, "score": score})
+            hits.append({
+                "filename": hit.entity.get("filename"),
+                "text": hit.entity.get("text"),
+                "score": hit.score,
+            })
         return hits
+
+    def search(self, query: str, k: int = 3, nprobe: int = 10):
+        """
+        Convenience wrapper: embed text query, then run ANN search.
+        """
+        query_vector = self.emb_model.embed_query(query)
+        return self.ANN_search(query_vector, k=k, nprobe=nprobe)
 
 
 # Example usage
@@ -160,7 +169,6 @@ if __name__ == "__main__":
     db = MilvusDB()
     print(db.store_data(chunks, filenames))
 
-    res = db.retrieve_data("What is in the document?", k=3)
+    res = db.search("What is in the document?", k=3)
     for r in res:
         print("Retrieved:", r)
-

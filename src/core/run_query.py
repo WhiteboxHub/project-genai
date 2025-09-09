@@ -1,35 +1,3 @@
-# from prompt import format_prompt
-# from storing import MilvusDB
-# from embeding import EmbedModel
-
-# # Initialize Milvus
-# db = MilvusDB(embedding_model=EmbedModel.huggingface_embedding())
-
-# # Your query
-# query = "What is in the document?"
-
-# # Retrieve relevant context from Milvus
-# retrieved_docs = db.retrieve_data(query, k=3)
-# context = "\n".join([doc["text"] for doc in retrieved_docs])
-
-# # Format prompt
-# prompt = format_prompt(query, context)
-# print(prompt)
-
-#==================output====================
-# System: You are an AI assistant. 
-# Use only the provided context to answer questions.
-# Be clear and concise.
-
-# Context:
-# Slide 2: Learning Objectives
-# Explain what students will learn: 1.
-# Slide 3: What is a Decision Tree?
-# Emphasize that this session will cover both conceptual understanding and
-# practical implementation in Python.
-
-# User Question: What is in the document?
-
 from storing import MilvusDB
 from embeding import EmbedModel
 from general import GeneralLLM
@@ -41,7 +9,8 @@ def query_pipeline(query: str, k: int = 3):
     llm = GeneralLLM()
 
     # retrieve context
-    results = db.retrieve_data(query, k=k)
+    #results = db.retrieve_data(query, k=k)
+    results = db.search(query, k=k)
     if not results:
         print("⚠️ No relevant docs found in Milvus.")
         return
@@ -58,20 +27,38 @@ def query_pipeline(query: str, k: int = 3):
     print(answer)
 
 if __name__ == "__main__":
-    query_pipeline("Explain decision trees vs random forests")
+    queries = [
+        "What is Agentic AI?",
+        "How does chunking help embeddings?",
+        "Explain what LangChain is"
+    ]
 
-#========output============
+    for q in queries:
+        print(f"\n=== Query: {q} ===")
+        query_pipeline(q)
+
+#==================OUTPUT===========================
 # 🤖 Groq Answer:
-# Decision Trees and Random Forests are both machine learning algorithms used for classification and regression tasks.
+# Agentic AI refers to a type of artificial intelligence that is designed to take on a more proactive and autonomous role, acting as an agent to achieve specific goals or objectives. This type of AI is programmed to make decisions, take actions, and interact with its environment in a more independent and dynamic way.
 
-# **Decision Trees:**
-# A decision tree is a tree-like model where each internal node represents a feature or attribute, each branch represents a decision, and each leaf node represents a class label or target value. The tree is built by recursively partitioning the data into subsets based on the most significant feature.
+# === Query: How does chunking help embeddings? ===
+# ✅ Connected to Milvus at localhost:19530
 
-# **Random Forests:**
-# A Random Forest is an ensemble learning method that combines multiple decision trees to improve the accuracy and robustness of predictions. Instead of using the entire feature set to build each tree, a random subset of features is selected, reducing overfitting and improving generalization.
-    
-# Key differences:
+# 🤖 Groq Answer:
+# Chunking helps embeddings by breaking down complex information into smaller, manageable pieces. 
 
-# - **Ensemble method**: Random Forest is an ensemble method that combines multiple decision trees, while Decision Trees are single models.
-# - **Feature selection**: Random Forest selects a random subset of features at each node, whereas Decision Trees use all features.
-# - **Robustness**: Random Forests are more robust to overfitting due to the random feature selection, whereas Decision Trees can overfit the data.
+# This process enables the AI to:
+
+# 1. Reduce the dimensionality of the data, making it easier to process and analyze.
+# 2. Identify patterns and relationships within the data.
+# 3. Improve the accuracy and efficiency of the embedding generation process.
+# 4. Allow for more nuanced and detailed representations of the data.
+
+# By chunking, the AI can create more informative and contextually relevant embeddings, leading to better performance in downstream tasks and applications.
+
+# === Query: Explain what LangChain is ===
+# ✅ Connected to Milvus at localhost:19530
+
+# 🤖 Groq Answer:
+# LangChain is a Python library designed to facilitate the construction of conversational
+# AI systems. It utilizes various techniques such as chaining, threading, and looping to enable the creation of complex conversational flows and interfaces. LangChain aims to simplify the development of AI assistants, chatbots, or other conversational agents by providing a flexible and modular framework for building and combining different components. 
