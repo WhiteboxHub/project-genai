@@ -124,7 +124,8 @@ index_field_data = [
         "is_primary":True,
         "max_length":100
     },{
-        'field_name':'embeddings', 'datatype':DataType.FLOAT_VECTOR,'dim':384
+        'field_name':'embedding',  # Changed from 'embeddings' to match the code
+        'datatype':DataType.FLOAT_VECTOR,'dim':384
     },{
         'field_name':'text', 'datatype':DataType.VARCHAR , 'max_length' : 800
     }

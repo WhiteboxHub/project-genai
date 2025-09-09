@@ -1,6 +1,12 @@
-<<<<<<< HEAD
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
+docker-files/volumes/
 .env
-volumes
-=======
-.env
->>>>>>> fcca96b1f96156a0e0bc1700aa6de34d0de4667e
+.venv
+env/
+venv/
+ENV/
