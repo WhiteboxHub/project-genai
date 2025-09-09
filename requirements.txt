@@ -4,3 +4,6 @@ cryptography>=3.1
 nltk
 langchain-huggingface
 langchain-postgres
+pymupdf
+pymilvus
+numpy

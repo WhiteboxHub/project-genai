@@ -1,16 +1,16 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter, CharacterTextSplitter
 import nltk
-
+from src.core.data_loader import pdf_docs
 
 class chunking:
     
     @staticmethod
-    def chunk_text(text, chunk_size=1000, overlap=200):
+    def chunk_text(pdf_docs, chunk_size=1000, overlap=200):
         """
         Splits the input text into chunks of specified size with a given overlap.
 
         Args:
-            text (str): The input text to be chunked.
+            pdf_docs (list): A list of PDF document objects to be chunked.
             chunk_size (int): The size of each chunk.
             overlap (int): The number of overlapping characters between chunks.
 
@@ -26,17 +26,17 @@ class chunking:
 
         chunks = []
         start = 0
-        text_length = len(text)
+        text_length = len(pdf_docs)
 
         while start < text_length:
             end = min(start + chunk_size, text_length)
-            chunks.append(text[start:end])
+            chunks.append(pdf_docs[start:end])
             start += chunk_size - overlap
 
         return chunks
     
     @staticmethod
-    def recursive_chunk_text(text, chunk_size=1000, overlap=200, min_chunk_size=200):
+    def recursive_chunk_text(pdf_docs, chunk_size=1000, overlap=200, min_chunk_size=200):
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=overlap,
@@ -44,23 +44,25 @@ class chunking:
             separators=["\n\n", "\n", " ", ""],
             min_chunk_size=min_chunk_size
         )
-        return text_splitter.split_text(text)
-    
+        chunks = text_splitter.split_text(pdf_docs)
+        return chunks
+
     @staticmethod
-    def character_chunk_text(text, chunk_size=1000, overlap=200):
+    def character_chunk_text(pdf_docs, chunk_size=1000, overlap=200):
         text_splitter = CharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=overlap,
             length_function=len
         )
-        return text_splitter.split_text(text)
-    
+        chunks = text_splitter.split_text(pdf_docs)
+        return chunks
+
     @staticmethod
-    def nltk_sentence_chunk_text(text, chunk_size=1000, overlap=200):
+    def nltk_sentence_chunk_text(pdf_docs, chunk_size=1000, overlap=200):
 
         nltk.download('punkt')
-        sentences = nltk.sent_tokenize(text)
-        
+        sentences = nltk.sent_tokenize(" ".join([doc.page_content for doc in pdf_docs]))
+
         chunks = []
         current_chunk = ""
         
