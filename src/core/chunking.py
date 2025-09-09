@@ -1,7 +1,7 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter,CharacterTextSplitter
 import nltk
 from nltk.tokenize import sent_tokenize
-nltk.download('punkt_tab')
+nltk.download('punkt_tab',quiet=True)
 import PyPDF2
 
 class file_chunking:

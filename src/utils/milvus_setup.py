@@ -55,7 +55,11 @@ embedding_field = FieldSchema(
 text_field = FieldSchema(
     name="text", 
     dtype=DataType.VARCHAR, 
-    max_length=1000
+    max_length=1000,
+    analyzer_params = {"tokenizer": "standard", "filter": ["lowercase"]},
+    enable_analyzer=True, # Whether to enable text analysis for this field
+    enable_match=True # Whether to enable text match
+
 )
 
 
