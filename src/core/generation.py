@@ -38,15 +38,20 @@ class generation_ans:
         return response.choices[0].message.content
 
     # Example usage
-
+if __name__ == "__main__":
     docs = [
         "The moon orbits the Earth every 27.3 days.",
         "Neil Armstrong was the first person to walk on the moon in 1969."
     ]
     query = "Who was the first person on the moon?"
     prompt = "You are a helpful assistant. Answer clearly."
-    answer = generate_with_groq(docs, query, prompt, model="llama-3.3-70b-versatile")
+    answer = generation_ans.generate_with_groq(docs, query, prompt, model="llama-3.3-70b-versatile")
 
     print("Answer:", answer)
+
+    ####output#############
+    '''
+    Answer: The first person to walk on the moon was Neil Armstrong, in 1969.
+    '''
    
 

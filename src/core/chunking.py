@@ -46,16 +46,16 @@ class file_chunking:
             raise ImportError("Please install nltk: pip install nltk")        
         sentences = sent_tokenize(text)        
         return sentences
-   
+if __name__ == "__main__":
     sample_text = """Artificial Intelligence is transforming the world. 
     It is used in healthcare, finance, and education. 
     Sentence-based chunking helps in semantic search.
     The creation of a government grantmaking agency.
     They inspire curiosity about our own experiences and those of our neighbours.
     """
-    print("Fixed Chunks:\n",overlap(sample_text,15,5))
-    print("Recursive Chunks:\n",recursive_chunk(sample_text,15,5))
-    print("Sentence Chunks:\n",sentence_chunk(sample_text))    
+    print("Fixed Chunks:\n",file_chunking.overlap(sample_text,15,5))
+    print("Recursive Chunks:\n",file_chunking.recursive_chunk(sample_text,15,5))
+    print("Sentence Chunks:\n",file_chunking.sentence_chunk(sample_text))    
     
     ####output
     

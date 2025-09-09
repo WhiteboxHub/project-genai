@@ -51,4 +51,15 @@ class text_extraction:
             script.decompose()
         text = soup.get_text(separator="\n")
         return text
-        
+if __name__ == "__main__":  
+    print(extract_text_from_pdf("./Data/sciencerag.pdf"))
+
+#output:
+'''Photosynthesis in Plants
+Photosynthesis is a biological process that occurs in plants, algae, and some bacteria, where light
+energy is 
+converted into chemical energy in the form of glucose (a sugar) and oxygen. This process is vital for
+the survival 
+of life on Earth, as it provides the base for the food chain and releases oxygen into the atmosphere.
+### The Process of Photosynthesis..................
+'''

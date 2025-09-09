@@ -16,8 +16,8 @@ class embed_model:
         embeddings=model.embed_documents(text)
         return embeddings
         
-        
-    print("SentenceTransformers embedding:\n", sentence_transformer_embed("hello world","all-MiniLM-L6-v2"))
+if __name__ == "__main__":        
+    print("SentenceTransformers embedding:\n", embed_model.sentence_transformer_embed("hello world","all-MiniLM-L6-v2"))
     #print("HuggingFace embedding:\n", huggingface_embed("its beautiful day","sentence-transformers/all-MiniLM-L6-v2"))
     
     
