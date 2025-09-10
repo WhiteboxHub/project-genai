@@ -116,8 +116,14 @@ class Milvus:
     def search(self,embed_text):
         try:
 
-            result = 
-            pass
+            result = self.client.search(
+            collection_name=self.collection_name,
+            anns_field="embeddings",
+            data=[embed_text],
+            limit=3,
+            search_params={"metric_type": "IP"}
+        )
+            return result[0]
         except MilvusException as e:
             raise e
 
