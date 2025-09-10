@@ -1,6 +1,3 @@
-<<<<<<< HEAD
 .env
 volumes
-=======
-.env
->>>>>>> fcca96b1f96156a0e0bc1700aa6de34d0de4667e
+__pycache__

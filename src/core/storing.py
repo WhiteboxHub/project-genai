@@ -1,4 +1,4 @@
-from pymilvus import MilvusClient
+from pymilvus import MilvusClient,MilvusException
 import os
 from dotenv import load_dotenv
 from src.utils.logger import logger
@@ -26,6 +26,7 @@ class Milvus:
     def create_database(self,db_name):
         try:
             self.client.create_database(db_name=db_name)
+            print(f"Created {db_name}")
         except Exception as e:
             raise e
     
@@ -36,7 +37,7 @@ class Milvus:
     @logger
     def discribe_db(self, db_name):
         try:
-            return self.client.describe_database(db_name="default")
+            return self.client.describe_database(db_name=db_name)
         except Exception as e:
             raise e
     
@@ -47,30 +48,35 @@ class Milvus:
                 self.client.drop_collection(
                             collection_name=self.collection_name
                         )
-                schema = self.client.create_schema(
+                schema = MilvusClient.create_schema(
                     auto_id=False,
                     enable_dynamic_field=True,
                 )
-                index_filed_name = "embedding"
+                index_filed_name = "embeddings"
                 
                 for s in Schema_details:
                     schema.add_field(**s)
-                    
-                if index_filed_name:
-                    index_data = milvus_indexes.get(index_type)
-                    index_params = self.client.prepare_index_params()
-                    index_params.add_index(
-                        field_name=index_filed_name,
-                        metric_type=index_data.get('metic_type'),
-                        index_type=index_data.get('index_type'),
-                        index_name=index_data.get("index_name"),
-                        params=index_data.get("params")
-                    )
-
+                    print(schema)
+                
                 self.client.create_collection(
                         collection_name=self.collection_name,
                         schema=schema,
-                        index_params=index_params
+                    )
+                index_data = milvus_indexes.get(index_type)
+                print(index_data)
+                index_params = MilvusClient.prepare_index_params()
+                index_params.add_index(
+                    field_name=index_filed_name,
+                    metric_type=index_data.get('metric_type'),
+                    index_type=index_data.get('index_type'),
+                    index_name=index_data.get("index_name"),
+                    params=index_data.get("params")
+                )
+
+                self.client.create_index(
+                        collection_name=self.collection_name,
+                        index_params=index_params,
+                        sync=False
                     )
             except Exception as e:
                 raise e
@@ -90,16 +96,29 @@ class Milvus:
 
         for t,e in zip(text_chunks,chunk_embeding):
             info = {
-                "pk": uuid.uuid4(),
-                "embeedings" : e ,
+                "pk": str(uuid.uuid4()),
+                "embeddings" : e ,
                 "text" : t
             }
+            data.append(info)
         try:
-            self.client.insert(
+            res =  self.client.insert(
                 collection_name=self.collection_name,
                 data=data
             )
+            print(f"inserted data {res}")
+            return res
         except Exception as e:
+            raise e
+
+
+    @logger
+    def search(self,embed_text):
+        try:
+
+            result = 
+            pass
+        except MilvusException as e:
             raise e
 
 
