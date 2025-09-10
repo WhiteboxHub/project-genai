@@ -19,7 +19,8 @@ class Milvus:
         vector_dim: int = 384,
         texts: list[str] = None,
         query_text: str = None,
-        top_k: int = 10
+        top_k: int = 10,
+        metric_type: str = None,
     ):
 
         """
@@ -33,17 +34,18 @@ class Milvus:
 
         # Check if collection exists
         if utility.has_collection(collection_name):
-            collection = Collection(collection_name)
-            print(f"Collection '{collection_name}' exists, using existing collection.")
-        else:
-            # Define collection schema
-            fields = [
-                FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
-                FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=vector_dim)
-            ]
-            schema = CollectionSchema(fields, description="Collection for text embeddings")
-            collection = Collection(name=collection_name, schema=schema)
-            print(f"Collection '{collection_name}' created successfully.")
+            print(f"Collection '{collection_name}' exists, dropping existing collection.")
+            Collection(collection_name).drop()
+        
+        # Define collection schema
+        fields = [
+            FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
+            FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=vector_dim)
+        ]
+
+        schema = CollectionSchema(fields, description="Collection for text embeddings")
+        collection = Collection(name=collection_name, schema=schema)
+        print(f"Collection '{collection_name}' created successfully.")
 
         # Load embedding model
         model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -59,12 +61,15 @@ class Milvus:
         top_results = []
         if query_text:
             query_embedding = model.encode([query_text]).tolist()
-            search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
+            
+            #metric_type" values: "COSINE", "IP", "L2"
+            search_params = {"metric_type": metric_type, "params": {"nprobe": 10}}
+            
 
             # collection is your Milvus collection object
             index_params = {
                 "index_type": "IVF_FLAT",  # can also be HNSW, IVF_SQ8, etc.
-                "metric_type": "L2",     # ANN,COSINE
+                "metric_type": metric_type,
                 "params": {"nlist": 128}   # number of clusters
             }
 
@@ -94,16 +99,18 @@ if __name__ == "__main__":
         "Sentence chunking keeps full sentences intact."
     ]
     query = "How does retrieval-augmented generation work?"
+    metric_type = "L2"      # COSINE, L2, IP
 
     top_matches = Milvus.Milvus_store_data_insert_and_query(
         collection_name="my_collection",
         vector_dim=384,
         texts=sample_texts,
         query_text=query,
-        top_k=10
+        top_k=10,
+        metric_type = metric_type      
     )
 
-    print("Top matches (ID, distance):")
+    print(f"Top matches (ID, distance): for metric_type: {metric_type}")
     for item in top_matches:
         print(item)
 
@@ -124,22 +131,21 @@ class pinecodedb:
         pass
 
 
-  #   -----------     Output      -----------
-"""   
- (.venv) hema@Mac project-genai % /Users/hema/Desktop/project-genai/.venv/bin/python /Users/hema/Desktop/proj
-ect-genai/src/core/storing.py
-Collection 'my_collection' exists, using existing collection.
+  #   -----------    Milvus Output  for " metric_type = "IP" "   -----------
+"""
+Collection 'my_collection' exists, dropping existing collection.
+Collection 'my_collection' created successfully.
 Inserted 2 records into 'my_collection'.
-Top matches (ID, distance):
-(460663754245597928, 0.2971716821193695)
-(460663754245597934, 0.2971716821193695)
-(460663754245597931, 0.2971716821193695)
-(460663754245597925, 0.2971716821193695)
-(460663754245597937, 0.2971716821193695)
-(460663754245597922, 0.2971716821193695)
-(460663754245597940, 0.2971716821193695)
-(460663754245597943, 0.2971716821193695)
-(460663754245597932, 1.6296353340148926)
-(460663754245597929, 1.6296353340148926)
-
+Top matches (ID, distance): for IP
+(460663754245597979, 0.8514142036437988)
+(460663754245597980, 0.18518225848674774)
+"""  
+#----------------Output for metric_type: COSINE-------------------
+"""
+Collection 'my_collection' exists, dropping existing collection.
+Collection 'my_collection' created successfully.
+Inserted 2 records into 'my_collection'.
+Top matches (ID, distance): for metric_type: COSINE
+(460663754245597982, 0.8514142036437988)
+(460663754245597983, 0.18518225848674774)
 """

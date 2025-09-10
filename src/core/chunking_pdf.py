@@ -36,7 +36,7 @@ class PDFChunker:
         pdf_file = "/Users/hema/Desktop/project-genai/Data/langchain.pdf"
 
         # text = extraction.readfile_pdf(pdf_file)
-        text = PDFChunker.extract_text(pdf_file)
+        text = self.extract_text(pdf_file)
         chunks = self.splitter.split_text(text)
 
         return chunks
