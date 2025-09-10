@@ -41,6 +41,9 @@ class embed_model:
         Compute cosine similarity between two embeddings
         """
         return np.dot(embedding1, embedding2) / (np.linalg.norm(embedding1) * np.linalg.norm(embedding2))
+    
+# Create a global instance for easy import
+embedding_model = embed_model()
 
 if __name__ == "__main__":
 
