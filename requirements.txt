@@ -1,4 +1,6 @@
 transformers
 torch
+langchain
+sentence-transformers
 
 # running pip install -r requirements.txt will install Hugging Face Transformers and PyTorch automatically.
