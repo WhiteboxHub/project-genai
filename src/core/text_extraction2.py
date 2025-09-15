@@ -1,14 +1,19 @@
 from langchain_community.document_loaders import PyMuPDFLoader, CSVLoader,DirectoryLoader, PyPDFLoader
-from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
-from langchain.embeddings import HuggingFaceEmbeddings
+from sentence_transformers import SentenceTransformer
+from pinecone import Pinecone,ServerlessSpec
+from langchain_pinecone import PineconeVectorStore
+from pinecone import PineconeException
 from generation import generate_response
 from langchain_groq import ChatGroq
 from chunking import file_chunking
+
+from embeding import Embed_model
 from langchain.schema import Document
 from typing import List
 import os
+
 from dotenv import load_dotenv
-from storing import ChromaDB
+from storing import Pineconedb
 
 load_dotenv()
 folder_path = os.getenv("pdf_folder_path")
@@ -64,7 +69,22 @@ if __name__ == "__main__":
     else:
         print("No chunks created.")
 
-    vector_store = ChromaDB.store_data(all_chunks)
+    embeddings1=Embed_model.sentence_Transfoer(all_chunks, model_name="all-MiniLM-L6-v2")
+    print(embeddings1[1])
+
+    '''create_store=Pineconedb.create_index("gen-ai", 384, metric="cosine", cloud="aws", region="us-east-1")
+
+    storing=Pineconedb.store_embeddings_pinecone("gen-ai", all_chunks, embeddings1)'''
+    query="Explain what is Agentic AI?"
+    retrieved_data=Pineconedb.retrieve_data_from_pinecone("gen-ai", query=query, top_k=5, model_name="all-MiniLM-L6-v2")
+    print(retrieved_data)
+    context_str = "\n".join([doc.page_content for doc in retrieved_data])
+    final_result=generate_response(context_str, query)
+    print(final_result)
+
+    #print(f"\nRetrieved context preview:\n{context_str[:500]}")
+    
+    '''vector_store = ChromaDB.store_data(all_chunks)
     print(vector_store._collection.count())
 
     # Prepare embedding model
@@ -73,11 +93,11 @@ if __name__ == "__main__":
     # Run a test query
     query = "Explain what is langchain?"
     retrieved_text= ChromaDB.retrieve_data(query, model=embedding_model, collection=vector_store)
-    context_str = "\n".join([doc.page_content for doc in retrieved_text])
+    context_str = "\n".join([doc.page_content for doc in retrieved_text])'
 
     #print(f"\nRetrieved context preview:\n{context_str[:500]}")
 
     final_result=generate_response(context_str, query)
     print(final_result)
-    
+    '''
     

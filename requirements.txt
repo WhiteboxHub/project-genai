@@ -13,3 +13,5 @@ streamlit
 langchain_huggingface
 chromadb
 langchain_groq
+pinecone
+langchain-pinecone
