@@ -72,9 +72,9 @@ if __name__ == "__main__":
     embeddings1=Embed_model.sentence_Transfoer(all_chunks, model_name="all-MiniLM-L6-v2")
     print(embeddings1[1])
 
-    '''create_store=Pineconedb.create_index("gen-ai", 384, metric="cosine", cloud="aws", region="us-east-1")
+    create_store=Pineconedb.create_index("gen-ai", 384, metric="cosine", cloud="aws", region="us-east-1")
 
-    storing=Pineconedb.store_embeddings_pinecone("gen-ai", all_chunks, embeddings1)'''
+    storing=Pineconedb.store_embeddings_pinecone("gen-ai", all_chunks, embeddings1)
     query="Explain what is Agentic AI?"
     retrieved_data=Pineconedb.retrieve_data_from_pinecone("gen-ai", query=query, top_k=5, model_name="all-MiniLM-L6-v2")
     print(retrieved_data)
@@ -82,22 +82,5 @@ if __name__ == "__main__":
     final_result=generate_response(context_str, query)
     print(final_result)
 
-    #print(f"\nRetrieved context preview:\n{context_str[:500]}")
     
-    '''vector_store = ChromaDB.store_data(all_chunks)
-    print(vector_store._collection.count())
-
-    # Prepare embedding model
-    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-    # Run a test query
-    query = "Explain what is langchain?"
-    retrieved_text= ChromaDB.retrieve_data(query, model=embedding_model, collection=vector_store)
-    context_str = "\n".join([doc.page_content for doc in retrieved_text])'
-
-    #print(f"\nRetrieved context preview:\n{context_str[:500]}")
-
-    final_result=generate_response(context_str, query)
-    print(final_result)
-    '''
     
