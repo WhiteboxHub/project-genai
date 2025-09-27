@@ -1,0 +1,35 @@
+transformers>=4.42.0
+torch>=2.2.0
+datasets>=2.20.0
+# NLP
+nltk==3.8.1
+sentence-transformers==2.7.0
+
+groq
+langchain-groq
+PyPDF2
+#langchain_google_genai
+langchain
+#streamlit
+langchain_community
+#python-dotenv
+pypdf
+# # Core LangChain ecosystem (v0.2)
+# langchain==0.2.25
+# langchain-community==0.2.23
+# langchain-core==0.2.43
+
+# # Groq integration in matching version
+# langchain-groq==0.2.0
+
+# # Milvus integration
+langchain-milvus==0.1.6
+
+
+# Vector DB
+chromadb==0.5.5
+pymilvus==2.4.4
+
+# Utils
+#tqdm==4.66.5
+python-dotenv==1.0.1

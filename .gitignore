@@ -1,0 +1,41 @@
+# Python virtual environments
+myvenv/
+
+
+.env/
+# Conda environment folders
+.env/
+venv/
+.venv/
+conda-env/
+*/.conda/
+*.conda
+*.lock
+
+# Default Conda environments sometimes created
+env/
+envs/
+
+# Ignore virtual environment
+venv/
+.env
+*.env
+
+# Ignore dependencies
+requirements.txt
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore data and models
+data/
+models/
